@@ -63,10 +63,21 @@ namespace la_mia_pizzeria_static.Controllers.API
             }
         }
 
-       
+        [HttpPost]
+        public IActionResult CreatePizza([FromBody] Pizza newPizza)
+        {
+            try
+            {
+                _myDatabase.Add(newPizza);
+                _myDatabase.SaveChanges();
+                return Ok();
 
-
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
 
     }
 }
