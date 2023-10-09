@@ -34,7 +34,8 @@ namespace la_mia_pizzeria_static.Controllers.API
                 return BadRequest(new { Message = "Non hai inserito nessun valore per la ricerca" });
             }
 
-            List<Pizza> searchedPizzas = _myDatabase.Pizzas.Where(pizza => pizza.Name.ToLower().Contains(search.ToLower())).Include(pizza => pizza.Category).Include(pizza => pizza.Ingredients).ToList();
+            List<Pizza> searchedPizzas = _myDatabase.Pizzas.Where(pizza => pizza.Name.ToLower().Contains(search.ToLower()))
+                                            .Include(pizza => pizza.Category).Include(pizza => pizza.Ingredients).ToList();
 
             if(searchedPizzas.Count > 0)
             {
@@ -46,8 +47,26 @@ namespace la_mia_pizzeria_static.Controllers.API
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult SearchPizzaById(int id)
+        {
+            Pizza? pizza = _myDatabase.Pizzas.Where(pizza => pizza.Id == id).Include(pizza => pizza.Category)
+                                .Include(pizza => pizza.Ingredients).FirstOrDefault();
+
+            if (pizza != null)
+            {
+                return Ok(pizza);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
        
 
-        
+
+
+
     }
 }
