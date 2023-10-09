@@ -20,6 +20,8 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 
 builder.Services.AddScoped<ICustomLogger, CustomFileLogger>();
 builder.Services.AddScoped<PizzaContext, PizzaContext>();
+builder.Services.AddScoped<IRepositoryPizzas, RepositoryPizzas>();
+
 
 var app = builder.Build();
 

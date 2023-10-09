@@ -11,33 +11,32 @@ namespace la_mia_pizzeria_static.Controllers.API
     [ApiController]
     public class PizzasController : ControllerBase
     {
-        private PizzaContext _myDatabase;
-
-        public PizzasController(PizzaContext db)
+        private IRepositoryPizzas _repoPizzas;
+       
+        public PizzasController(IRepositoryPizzas repoPizzas)
         {
-            _myDatabase = db;
+            _repoPizzas = repoPizzas;
         }
 
         [HttpGet]
         public IActionResult GetPizzas()
         {
-            List<Pizza> pizzas = _myDatabase.Pizzas.Include(pizza => pizza.Category).Include(pizza => pizza.Ingredients).ToList();
+            List<Pizza> pizzas = _repoPizzas.GetPizzas();
 
             return Ok(pizzas);
         }
 
         [HttpGet]
-        public IActionResult SearchPizzas(string? search)
+        public IActionResult SearchPizza(string? search)
         {
-            if(search == null)
+            if (search == null)
             {
                 return BadRequest(new { Message = "Non hai inserito nessun valore per la ricerca" });
             }
 
-            List<Pizza> searchedPizzas = _myDatabase.Pizzas.Where(pizza => pizza.Name.ToLower().Contains(search.ToLower()))
-                                            .Include(pizza => pizza.Category).Include(pizza => pizza.Ingredients).ToList();
+            List<Pizza> searchedPizzas = _repoPizzas.GetPizzaByName(search);
 
-            if(searchedPizzas.Count > 0)
+            if (searchedPizzas.Count > 0)
             {
                 return Ok(searchedPizzas);
             }
@@ -48,10 +47,9 @@ namespace la_mia_pizzeria_static.Controllers.API
         }
 
         [HttpGet("{id}")]
-        public IActionResult SearchPizzaById(int id)
+        public IActionResult GetPizzaById(int id)
         {
-            Pizza? pizza = _myDatabase.Pizzas.Where(pizza => pizza.Id == id).Include(pizza => pizza.Category)
-                                .Include(pizza => pizza.Ingredients).FirstOrDefault();
+            Pizza? pizza = _repoPizzas.GetPizzaById(id);
 
             if (pizza != null)
             {
@@ -66,11 +64,19 @@ namespace la_mia_pizzeria_static.Controllers.API
         [HttpPost]
         public IActionResult CreatePizza([FromBody] Pizza newPizza)
         {
+
             try
             {
-                _myDatabase.Add(newPizza);
-                _myDatabase.SaveChanges();
-                return Ok();
+                bool result = _repoPizzas.CreatePizza(newPizza);
+
+                if(result)
+                {
+                 return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
 
             }
             catch (Exception ex)
@@ -82,39 +88,33 @@ namespace la_mia_pizzeria_static.Controllers.API
         [HttpPut("{id}")]
         public IActionResult EditPizza(int id, [FromBody] Pizza editedPizza)
         {
-            Pizza? pizzaToEdit = _myDatabase.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
+            bool result = _repoPizzas.EditPizza(id, editedPizza);
 
-            if (pizzaToEdit == null)
+            if (result)
             {
-                return NotFound();
+                return Ok();
             }
-
-            pizzaToEdit.Name = editedPizza.Name;
-            pizzaToEdit.Description = editedPizza.Description;
-            pizzaToEdit.Price = editedPizza.Price;
-            pizzaToEdit.Image = editedPizza.Image;
-            pizzaToEdit.CategoryId = editedPizza.CategoryId;
-
-            _myDatabase.SaveChanges();
-
-            return Ok();
+            else
+            {
+                return BadRequest();
+            }
+           
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletePizza(int id)
         {
-            Pizza? pizzaToDelete = _myDatabase.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
+            bool result = _repoPizzas.DeletePizza(id);
 
-            if (pizzaToDelete == null)
+            if (result)
             {
-                return NotFound();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
             }
 
-            _myDatabase.Remove(pizzaToDelete);
-            _myDatabase.SaveChanges();
-
-
-            return Ok();
         }
 
     }
