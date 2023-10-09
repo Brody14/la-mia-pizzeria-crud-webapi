@@ -26,6 +26,19 @@ namespace la_mia_pizzeria_static.Controllers.API
             return Ok(pizzas);
         }
 
+        [HttpGet]
+        public IActionResult SearchPizzas(string? search)
+        {
+            if(search == null)
+            {
+                return BadRequest(new { Message = "Non hai inserito nessun valore per la ricerca" });
+            }
+
+            List<Pizza> searchedPizzas = _myDatabase.Pizzas.Where(pizza => pizza.Name.ToLower().Contains(search.ToLower())).ToList();
+
+            return Ok(searchedPizzas);
+        }
+
         
     }
 }
