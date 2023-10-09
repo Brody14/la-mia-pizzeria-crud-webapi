@@ -1,0 +1,58 @@
+/*USER INDEX*/
+
+main {
+    background-image: url(/img/bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.banner{
+    background-image: url(/img/banner.jpg);
+}
+
+.admin-icon {
+    color: #ca9e01;
+    font-size: 25px;
+}
+
+.card {
+    position: relative;
+    box-shadow: 3px 5px #b29eac;
+}
+
+.card-body {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.card:hover img{
+    opacity: 0.2;
+}
+
+.card:hover .card-body {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.card-title{
+    color: #000000;
+}
+
+.price{
+    font-size: 15px;
+}
+
+.rate-icons {
+    font-size: 17px;
+    color: #fffd1f;
+}
+
+.icon {
+    color: #dfcf89;
+    font-size: 20px;
+}
+

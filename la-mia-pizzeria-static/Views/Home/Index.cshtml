@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/user.css" />
+}
+
+@model List<Pizza>
+
+@if (Model.Count() == 0)
+{
+    <h3>Non ci sono pizze da mostrare...</h3>
+}
+
+    <div class="banner p-5">
+        <div class="container p-3">
+            <div class="col-5 text-center p-5 text-white">
+                <h2 class="p-3 ">Pizza Obradovic</h2>
+                <p>Con sei varianti di peperoncino per raggiungere lo stesso colore del viso del Coach quando il Partizan perde contro l'Efes</p>
+                <button type="button" class="btn btn-danger">Ordina ora</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container p-4">
+        <h2 class="fw-bold">Le nostre pizze</h2>
+    </div>
+
+    <div class="container mb-5 mt-3">
+        <div class="row row-cols-lg-4 row-cols-md-2 gy-3">
+
+            @foreach (Pizza pizza in Model)
+            {
+                <div class="col">
+                    <div class="card">
+                       
+                        <img class="mx-auto border-bottom" width="304" height="203" src="@pizza.Image" alt="@pizza.Name">
+                        
+                        <div class="card-body description">
+                            <div>
+                            <a class="text-decoration-none" href="@Url.Action("Details", "Home", new { id = pizza.Id })">
+                                <h5 class="card-title">@pizza.Name</h5>
+                            </a>
+                                <span class="price">
+                                    <strong>@pizza.Price&euro;</strong>
+                                </span>
+
+                                <div class="rating-wrapper d-flex">
+                                    <ul class="list-unstyled d-flex">
+
+
+                                        @for (int i = 0; i < @pizza.Rating; i++)
+                                        {
+                                            <li class="rate-icons"><i class="fa-solid fa-star"></i></li>
+                                        }
+
+                                    </ul>
+
+                                    <ul class="list-unstyled d-flex">
+                                        @for (int i = 0; i < 5 - @pizza.Rating; i++)
+                                        {
+                                            <li class="rate-icons"><i class="fa-regular fa-star"></i></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-danger align-self-end">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
+
+                            
+                        </div>
+                    </div>
+                </div>
+            }
+            
+        </div>
+    </div>
+

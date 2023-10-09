@@ -1,0 +1,30 @@
+﻿/*INDEX ADMIN*/
+
+:root {
+    --gold: #dfcf89;
+}
+
+.description {
+    text-align: justify;
+}
+
+.icon {
+    color: var(--gold);
+    font-size: 20px;
+}
+
+.add-icon {
+    border: 2px solid var(--gold);
+    border-radius: 999px;
+    padding: 5px
+}
+
+.btn-grobari {
+    background-color: var(--gold);
+}
+
+.btn-grobari:hover{
+    border: 1px solid var(--gold);
+    border-radius: 5px;
+}
+

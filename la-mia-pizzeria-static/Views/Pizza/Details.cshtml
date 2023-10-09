@@ -1,0 +1,89 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/admin.css" />
+}
+
+@model Pizza
+
+<div class="container p-5">
+
+    <div class="row p-3 align-items-center">
+
+        <div class="col-lg-8 col-md-12 p-3">
+            <img class="mx-auto img-fluid" src="@Model.Image" alt="@Model.Name">
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+            <h5 class="card-title lh-lg text-capitalize">@Model.Name</h5>
+
+            <ul class="list-unstyled">
+                <li>
+                    Descrizione: @Model.Description
+                </li>
+                <li>
+                    Prezzo: @Model.Price&euro;
+                </li>
+                <li>
+                    Categoria:
+                    @if(Model.Category != null)
+                    {
+                        @Model.Category.Name
+
+                    }else{
+                        <span>Nessuna categoria</span>
+                    }
+                </li>
+                <li>
+                    Valutazione: @Model.Rating/5
+                </li>
+            </ul>
+
+            <hr />
+
+            <h6>Ingredienti:</h6>
+            @if (Model.Ingredients != null && Model.Ingredients.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (Ingredient ingredient in Model.Ingredients)
+                    {
+
+                        <li>- @ingredient.Name</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>Non ci sono ingredienti da mostrare</span>
+            }
+            
+            <hr />
+            @if (User.IsInRole("ADMIN"))
+            {
+                <div class="d-flex p-2 align-items-center">
+                    <a class="p-2" href="@Url.Action("Edit", "Pizza", new { id = Model.Id })">
+                        <i class="icon fa-solid fa-pencil"></i>
+                    </a>
+                    <form asp-controller="Pizza" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn">
+                            <i class="icon fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
+
+<div class="container pb-5 text-center">
+    <a href="@Url.Action("Index", "Pizza")">
+        <i class="icon fa-solid fa-left-long"> 
+            <p> Torna Indietro </p>
+        </i>
+    </a>
+</div>

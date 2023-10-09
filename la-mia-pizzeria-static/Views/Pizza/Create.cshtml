@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/admin.css" />
+}
+
+@model PizzaFormModel
+
+<div class="container p-5">
+
+    <h2 class="mb-4">Aggiungi una pizza</h2>
+
+    <form asp-controller="Pizza" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="name" placeholder="Inserisci il nome della pizza" asp-for="Pizza.Name">
+            <span asp-validation-for="Pizza.Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descrizione</label>
+            <input type="text" class="form-control" id="description" placeholder="Inserisci la descrizione della pizza" asp-for="Pizza.Description">
+            <span asp-validation-for="Pizza.Description" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="price">Prezzo</label>
+            <input type="number" class="form-control" id="price" placeholder="Inserisci il prezzo della pizza" asp-for="Pizza.Price">
+            <span asp-validation-for="Pizza.Price" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="ingredients">Ingredienti</label>
+            <select asp-for="SelectedIngredientsId"
+                    multiple="multiple"
+                    size="5"
+                    class="form-control mb-2 mr-sm-2 ml-sm-3 leftList"
+                    asp-items="@Model.Ingredients">
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="Pizza.CategoryId">Categoria</label>
+            <select asp-for="Pizza.CategoryId" class="form-select" aria-label="Default select example">
+                <option selected>Scegli una categoria</option>
+                @foreach(Category cat in Model.Categories)
+                {
+                    <option value="@cat.CategoryId">@cat.Name</option>
+                    
+                }
+                
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="image">Immagine</label>
+            <input type="text" class="form-control" id="image" placeholder="Inserisci l'url dell'immagine della pizza" asp-for="Pizza.Image">
+            <span asp-validation-for="Pizza.Image" class="text-danger"></span>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <button type="submit" class="btn btn-grobari">Aggiungi</button>
+            <a href="@Url.Action("Index", "Pizza")" class="btn btn-grobari">Indetro</a>
+        </div>
+    </form>
+
+</div>
