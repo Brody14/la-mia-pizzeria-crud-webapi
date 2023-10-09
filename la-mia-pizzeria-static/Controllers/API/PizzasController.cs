@@ -79,5 +79,28 @@ namespace la_mia_pizzeria_static.Controllers.API
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult EditPizza(int id, [FromBody] Pizza editedPizza)
+        {
+            Pizza? pizzaToEdit = _myDatabase.Pizzas.Where(pizza => pizza.Id == id).FirstOrDefault();
+
+            if (pizzaToEdit == null)
+            {
+                return NotFound();
+            }
+
+            pizzaToEdit.Name = editedPizza.Name;
+            pizzaToEdit.Description = editedPizza.Description;
+            pizzaToEdit.Price = editedPizza.Price;
+            pizzaToEdit.Image = editedPizza.Image;
+            pizzaToEdit.CategoryId = editedPizza.CategoryId;
+
+            _myDatabase.SaveChanges();
+
+            return Ok();
+        }
+
+        
+
     }
 }
