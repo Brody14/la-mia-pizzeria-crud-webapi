@@ -89,7 +89,7 @@ namespace la_mia_pizzeria_static.DataBase
 
         public List<Pizza> GetPizzas()
         {
-            List<Pizza> pizzas = _myDatabase.Pizzas.Include(pizza => pizza.Category).ToList();
+            List<Pizza> pizzas = _myDatabase.Pizzas.Include(pizza => pizza.Category).Include(pizza => pizza.Ingredients).ToList();
 
             return pizzas;
         }

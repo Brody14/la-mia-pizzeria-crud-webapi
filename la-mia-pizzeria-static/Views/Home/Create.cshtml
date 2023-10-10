@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@section Style{
+    <link rel="stylesheet" href="~/css/user.css" />
+}
+
+<div class="container p-5">
+
+    <h2 class="mb-4">Aggiungi una pizza</h2>
+
+    <form asp-controller="Pizza" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="name" placeholder="Inserisci il nome della pizza">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descrizione</label>
+            <input type="text" class="form-control" id="description" placeholder="Inserisci la descrizione della pizza">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="price">Prezzo</label>
+            <input type="number" class="form-control" id="price" placeholder="Inserisci il prezzo della pizza">
+        </div>
+       
+        <div class="mb-4">
+            <label class="form-label" for="image">Immagine</label>
+            <input type="text" class="form-control" id="image" placeholder="Inserisci l'url dell'immagine della pizza">
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <button id="create" type="button" class="btn btn-grobari">Aggiungi</button>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-grobari">Indetro</a>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        document.getElementById("create").addEventListener('click', createPizza)
+
+        function createPizza() {
+
+            let formName = document.getElementById("name").value;
+            let formDescription = document.getElementById("description").value;
+            let formPrice = document.getElementById("price").value;
+            let formImage = document.getElementById("image").value;
+
+            let data = {
+                Name: formName,
+                Description: formDescription,
+                Price: formPrice,
+                Image: formImage,
+            }
+
+            axios.post("/api/Pizzas/CreatePizza", data).then((res) => {
+                
+                window.location.replace("https://localhost:7005/Home")
+
+            })
+
+        }
+     
+        
+    </script>
+}
