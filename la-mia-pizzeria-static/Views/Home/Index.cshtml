@@ -6,12 +6,6 @@
     <link rel="stylesheet" href="~/css/user.css" />
 }
 
-@model List<Pizza>
-
-@if (Model.Count() == 0)
-{
-    <h3>Non ci sono pizze da mostrare...</h3>
-}
 
     <div class="banner p-5">
         <div class="container p-3">
@@ -28,54 +22,67 @@
     </div>
 
     <div class="container mb-5 mt-3">
-        <div class="row row-cols-lg-4 row-cols-md-2 gy-3">
 
-            @foreach (Pizza pizza in Model)
-            {
-                <div class="col">
-                    <div class="card">
-                       
-                        <img class="mx-auto border-bottom" width="304" height="203" src="@pizza.Image" alt="@pizza.Name">
-                        
-                        <div class="card-body description">
-                            <div>
-                            <a class="text-decoration-none" href="@Url.Action("Details", "Home", new { id = pizza.Id })">
-                                <h5 class="card-title">@pizza.Name</h5>
-                            </a>
-                                <span class="price">
-                                    <strong>@pizza.Price&euro;</strong>
-                                </span>
+        <div id="row-empty" class="row d-none">
+            <h3>Non ci sono pizze da mostrare</h3>
+        </div>
 
-                                <div class="rating-wrapper d-flex">
-                                    <ul class="list-unstyled d-flex">
-
-
-                                        @for (int i = 0; i < @pizza.Rating; i++)
-                                        {
-                                            <li class="rate-icons"><i class="fa-solid fa-star"></i></li>
-                                        }
-
-                                    </ul>
-
-                                    <ul class="list-unstyled d-flex">
-                                        @for (int i = 0; i < 5 - @pizza.Rating; i++)
-                                        {
-                                            <li class="rate-icons"><i class="fa-regular fa-star"></i></li>
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <button type="button" class="btn btn-danger align-self-end">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </button>
-
-                            
-                        </div>
-                    </div>
-                </div>
-            }
+        <div id="row-full" class="row row-cols-lg-4 row-cols-md-2 gy-3">
             
         </div>
     </div>
+
+    @section Scripts{
+        <script type="text/javascript">
+
+            LoadAllPizzas();
+            
+            function LoadAllPizzas() {
+                axios.get('/api/Pizzas/GetPizzas').then((res) => {
+
+                    console.log(res)
+
+                    let rowEmpty = document.getElementById("row-empty");
+                    let rowFull = document.getElementById("row-full");
+
+                    if (res.data.length == 0) {
+                        rowEmpty.classList.remove("d-none");
+                    } else {
+
+                        rowFull.classList.remove("d-none");
+
+                        res.data.forEach(pizza => {
+                            rowFull.innerHTML +=
+                                ` <div class="col">
+                                    <div class="card">
+
+                                        <img class="mx-auto border-bottom" width="304" height="203" src="${pizza.image}" alt="${pizza.name}">
+
+                                        <div class="card-body description">
+                                            <div class="mb-3">
+                                                <h5 class="card-title">${pizza.name}</h5>
+                                                <p class="mb-0">${pizza.description}</p>
+                                                <span class="price">
+                                                    <strong>${pizza.price}&euro;</strong>
+                                                </span>
+                                            </div>
+
+                                            <button type="button" class="btn btn-danger align-self-end">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                </div>`
+
+                        })
+                            
+                    }
+                }
+                )
+            }
+        
+        </script>
+    }
 
