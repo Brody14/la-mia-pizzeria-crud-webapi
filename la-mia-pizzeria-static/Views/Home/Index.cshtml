@@ -17,8 +17,19 @@
         </div>
     </div>
 
-    <div class="container p-4">
-        <h2 class="fw-bold">Le nostre pizze</h2>
+
+    <div class="container my-5">
+        <div class="row row-cols-2 justify-content-between align-items-center">
+            <div class="col-auto">
+                <h2 class="fw-bold">Le nostre pizze</h2>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <input type="text" class="form-control" id="search_box" onkeyup="processChange()" placeholder="Cerca pizza per nome">
+            </div>
+
+        </div>
     </div>
 
     <div class="container mb-5 mt-3">
@@ -35,10 +46,22 @@
     @section Scripts{
         <script type="text/javascript">
 
-            LoadAllPizzas();
+            loadPizzas();
+
+            document.getElementById("search_box").addEventListener('keyup', searchPizzas)
+
+            function searchPizzas() {
+                let searchString = document.getElementById("search_box").value;
+
+                loadPizzas(searchString);
+            }
             
-            function LoadAllPizzas() {
-                axios.get('/api/Pizzas/GetPizzas').then((res) => {
+            function loadPizzas(searchParam) {
+            axios.get('/api/Pizzas/SearchPizza', {
+                params: {
+                    search: searchParam
+                }
+                }).then((res) => {
 
                     console.log(res)
 
@@ -48,8 +71,9 @@
                     if (res.data.length == 0) {
                         rowEmpty.classList.remove("d-none");
                     } else {
-
                         rowFull.classList.remove("d-none");
+
+                        rowFull.innerHTML = "";
 
                         res.data.forEach(pizza => {
                             rowFull.innerHTML +=
@@ -81,6 +105,8 @@
                     }
                 }
                 )
+
+
             }
         
         </script>

@@ -29,21 +29,19 @@ namespace la_mia_pizzeria_static.Controllers.API
         [HttpGet]
         public IActionResult SearchPizza(string? search)
         {
+            List<Pizza> searchedPizzas;
+
             if (search == null)
             {
-                return BadRequest(new { Message = "Non hai inserito nessun valore per la ricerca" });
-            }
-
-            List<Pizza> searchedPizzas = _repoPizzas.GetPizzaByName(search);
-
-            if (searchedPizzas.Count > 0)
-            {
-                return Ok(searchedPizzas);
+                searchedPizzas = _repoPizzas.GetPizzas();
             }
             else
             {
-                return NotFound();
+                searchedPizzas = _repoPizzas.GetPizzaByName(search);
             }
+
+            return Ok(searchedPizzas);
+      
         }
 
         [HttpGet("{id}")]
